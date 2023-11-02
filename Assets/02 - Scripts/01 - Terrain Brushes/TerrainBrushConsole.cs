@@ -5,9 +5,10 @@ using UnityEngine;
 
 public class TerrainBrushConsole : TerrainBrush
 {
+    const float max_height = 100;
 
-    [SerializeField, Range(0, 100)]
-    private float ranged_height = 20;
+    [SerializeField, Range(-max_height, max_height)]
+    private float ranged_height = 20.0f;
 
     [SerializeField]
     private bool eraser_mode = false;
@@ -23,7 +24,7 @@ public class TerrainBrushConsole : TerrainBrush
     private enum BrushType
     {
         Simple,
-
+        Incremental,
     }
     [SerializeField]
     private BrushType type = BrushType.Simple;
@@ -54,28 +55,28 @@ public class TerrainBrushConsole : TerrainBrush
             shape_is_round = true;
         }
 
-        if (type == BrushType.Simple || eraser_mode)
+        if (!hasGenerated)
         {
-            if (!hasGenerated)
+            if (type == BrushType.Simple || eraser_mode)
             {
                 SimpleTerrainBrush.Draw_(terrain, x, z, height, radius, shape_is_round);
-                hasGenerated = true;
+            }
+            else if (type == BrushType.Incremental)
+            {
+                IncrementalTerrainBrush.Draw_(terrain, x, z, height, radius, shape_is_round, max_height);
             }
 
-            if (fine_tuning_mode)
-            {
-                StartCoroutine(ResetGenerationFlagDelayed());
-            }
-            else
-            {
-                ResetGenerationFlag();
-            }
+            hasGenerated = true;
         }
-        /*else if ()
+
+        if (fine_tuning_mode)
         {
-
-        }*/
-
+            StartCoroutine(ResetGenerationFlagDelayed());
+        }
+        else
+        {
+            ResetGenerationFlag();
+        }
     }
 
     private static void ResetGenerationFlag()
