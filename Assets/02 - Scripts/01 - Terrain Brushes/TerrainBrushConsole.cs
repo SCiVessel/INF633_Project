@@ -21,17 +21,34 @@ public class TerrainBrushConsole : TerrainBrush
     [SerializeField]
     private BrushShape shape = BrushShape.Square;
 
-    private enum BrushType
+    public enum BrushType
     {
         Simple,
         Incremental,
+        Gaussian,
+        Smooth,
+        Random,
+        Noise
     }
-    [SerializeField]
-    private BrushType type = BrushType.Simple;
+    public BrushType type = BrushType.Simple;
 
     public bool fine_tuning_mode = true;
 
     private static bool hasGenerated = false;
+
+    [SerializeField, Range(0.0f, 100.0f), HideInInspector]
+    private float standard_deviation = 10.0f;
+
+    [SerializeField, Range(0.0f, 10.0f), HideInInspector]
+    private float smoothing_factor = 5.0f;
+    private float lastSmoothingFactor = -1;
+
+    [SerializeField, HideInInspector]
+    private int kernel_size = 3;
+    private int lastKernelSize = -1;
+
+    [SerializeField, Range(0.0f, 1.0f), HideInInspector]
+    private float frequency = 0.01f;
 
     public override void draw(int x, int z)
     {
@@ -65,6 +82,31 @@ public class TerrainBrushConsole : TerrainBrush
             {
                 IncrementalTerrainBrush.Draw_(terrain, x, z, height, radius, shape_is_round, max_height);
             }
+            else if (type == BrushType.Gaussian)
+            {
+                GaussianTerrainBrush.Draw_(terrain, x, z, height, radius, shape_is_round, max_height, standard_deviation);
+            }
+            else if (type == BrushType.Smooth)
+            {
+                float currentSmoothingFactor = smoothing_factor;
+                int currentKernalSize = kernel_size;
+                if (currentSmoothingFactor != lastSmoothingFactor || currentKernalSize != lastKernelSize)
+                {
+                    SmoothingTerrainBrush.Initialize(kernel_size, currentSmoothingFactor);
+                    lastSmoothingFactor = currentSmoothingFactor;
+                    lastKernelSize = currentKernalSize;
+                }
+                SmoothingTerrainBrush.Draw_(terrain, x, z, radius, shape_is_round, max_height);
+            }
+            else if (type == BrushType.Random)
+            {
+                RandomTerrainBrush.Draw_(terrain, x, z,  radius, max_height, height, shape_is_round);
+            }
+            else if (type == BrushType.Noise)
+            {
+                NoiseTerrainBrush.Draw_(terrain, x, z, radius, max_height, frequency, height, shape_is_round);
+            }
+
 
             hasGenerated = true;
         }
