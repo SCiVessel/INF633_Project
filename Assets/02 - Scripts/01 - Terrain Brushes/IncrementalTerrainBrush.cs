@@ -6,6 +6,11 @@ public class IncrementalTerrainBrush
 {
     public static void Draw_(CustomTerrain terrain, int x, int z, float height, int radius, bool shape_bool, float maxHeight)
     {
+        float terrainX0 = terrain.transform.position.x;
+        float terrainZ0 = terrain.transform.position.z;
+        float terrainX1 = terrainX0 + terrain.terrainSize().x + 12; // works better with +12, don't understand why
+        float terrainZ1 = terrainZ0 + terrain.terrainSize().z + 12;
+
         if (shape_bool)
         {
             int radiusSquared = radius * radius;
@@ -20,10 +25,10 @@ public class IncrementalTerrainBrush
                     {
                         float currentHeight = terrain.get(x + xi, z + zi);
                         currentHeight += height;
-
                         currentHeight = Mathf.Clamp(currentHeight, 0.0f, maxHeight);
 
-                        terrain.set(x + xi, z + zi, currentHeight);
+                        if (x + xi >= terrainX0 && x + xi <= terrainX1 && z + zi >= terrainZ0 && z + zi <= terrainZ1)
+                            terrain.set(x + xi, z + zi, currentHeight);
                     }
                 }
             }
@@ -36,10 +41,10 @@ public class IncrementalTerrainBrush
                 {
                     float currentHeight = terrain.get(x + xi, z + zi);
                     currentHeight += height;
-
                     currentHeight = Mathf.Clamp(currentHeight, 0.0f, maxHeight);
 
-                    terrain.set(x + xi, z + zi, currentHeight);
+                    if (x + xi >= terrainX0 && x + xi <= terrainX1 && z + zi >= terrainZ0 && z + zi <= terrainZ1)
+                        terrain.set(x + xi, z + zi, currentHeight);
                 }
             }
         }

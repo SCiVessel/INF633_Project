@@ -13,6 +13,11 @@ public class SmoothingTerrainBrush
 
     public static void Draw_(CustomTerrain terrain, int x, int z, int radius, bool shape_bool, float maxHeight)
     {
+        float terrainX0 = terrain.transform.position.x;
+        float terrainZ0 = terrain.transform.position.z;
+        float terrainX1 = terrainX0 + terrain.terrainSize().x + 12; // works better with +12, don't understand why
+        float terrainZ1 = terrainZ0 + terrain.terrainSize().z + 12;
+
         if (shape_bool)
         {
             int diameter = radius * 2;
@@ -30,7 +35,9 @@ public class SmoothingTerrainBrush
                         float currentHeight = terrain.get(x + xi, z + zi);
                         float smoothedHeight = ApplyGaussianWeight(terrain, x + xi, z + zi, weight);
                         smoothedHeight = Mathf.Clamp(smoothedHeight, 0f, maxHeight);
-                        terrain.set(x + xi, z + zi, smoothedHeight);
+
+                        if (x + xi >= terrainX0 && x + xi <= terrainX1 && z + zi >= terrainZ0 && z + zi <= terrainZ1)
+                            terrain.set(x + xi, z + zi, smoothedHeight);
                     }
                 }
             }
@@ -46,7 +53,9 @@ public class SmoothingTerrainBrush
                     float currentHeight = terrain.get(x + xi, z + zi);
                     float smoothedHeight = ApplyGaussianWeight(terrain, x + xi, z + zi, gaussianKernel);
                     smoothedHeight = Mathf.Clamp(smoothedHeight, 0f, maxHeight);
-                    terrain.set(x + xi, z + zi, smoothedHeight);
+
+                    if (x + xi >= terrainX0 && x + xi <= terrainX1 && z + zi >= terrainZ0 && z + zi <= terrainZ1)
+                        terrain.set(x + xi, z + zi, smoothedHeight);
                 }
             }
         }
