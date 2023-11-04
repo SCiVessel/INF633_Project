@@ -552,7 +552,7 @@ Light:
   m_BounceIntensity: 1
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
-  m_BoundingSphereOverride: {x: 0.09375, y: 0.03515625, z: -0.0390625, w: -1}
+  m_BoundingSphereOverride: {x: NaN, y: 4.437731e+11, z: 4.16e-43, w: 4.204622e+11}
   m_UseBoundingSphereOverride: 0
   m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
@@ -690,7 +690,7 @@ GameObject:
   - component: {fileID: 374040427}
   - component: {fileID: 374040430}
   - component: {fileID: 374040441}
-  - component: {fileID: 374040435}
+  - component: {fileID: 374040442}
   - component: {fileID: 374040440}
   m_Layer: 0
   m_Name: Terrain
@@ -777,18 +777,6 @@ MonoBehaviour:
   min_scale: 0.8
   max_scale: 1.2
   cam: {fileID: 0}
---- !u!114 &374040435
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 374040426}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 75a784b2bfbd9436ababbfa7c8e8805a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &374040440
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -826,6 +814,31 @@ MonoBehaviour:
   smoothing_factor: 10
   kernel_size: 3
   frequency: 0.01
+--- !u!114 &374040442
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 374040426}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5826680fb67fc4b4f8a896c8c845c45f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  eraser_mode: 0
+  shape: 1
+  type: 0
+  random_mode: 0
+  tree_number: 1
+  height_control: 0
+  min_height: 0
+  max_height: 100
+  steepness_control: 0
+  max_steepness: 100
+  distance_control: 0
+  min_distance: 3
+  fine_tuning_mode: 1
 --- !u!1 &534669902
 GameObject:
   m_ObjectHideFlags: 0
@@ -1907,7 +1920,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2137751596}
-  m_LocalRotation: {x: 0.09467271, y: 0.4793379, z: -0.052104156, w: 0.870952}
+  m_LocalRotation: {x: 0.09467273, y: 0.4793379, z: -0.05210416, w: 0.870952}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0

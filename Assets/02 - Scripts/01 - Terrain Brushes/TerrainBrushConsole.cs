@@ -33,7 +33,6 @@ public class TerrainBrushConsole : TerrainBrush
     public BrushType type = BrushType.Simple;
 
     public bool fine_tuning_mode = true;
-
     private static bool hasGenerated = false;
 
     [SerializeField, Range(0.0f, 100.0f), HideInInspector]

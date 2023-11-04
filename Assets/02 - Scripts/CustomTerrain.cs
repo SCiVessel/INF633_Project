@@ -183,6 +183,27 @@ public class CustomTerrain : MonoBehaviour {
         obj.color = Color.white;
         terrain.AddTreeInstance(obj);
     }
+
+    // Remove objects (trees) in an area
+    public void RemoveTreeInstance(float x, float z, float radius)
+    {
+        Vector2 center = new Vector2(x, z);
+        float threshold = radius * radius;
+        List<TreeInstance> newTrees = new List<TreeInstance>();
+        for (int i = 0; i < terrain_data.treeInstanceCount; i++)
+        {
+            var tree = terrain_data.treeInstances[i];
+            Vector2 pos2d = new Vector2(tree.position.x * heightmap_width, tree.position.z * heightmap_height);
+            if ((pos2d - center).sqrMagnitude <= threshold)
+            {
+                //delete
+                continue;
+            }
+            newTrees.Add(tree);
+        }
+        terrain_data.treeInstances = newTrees.ToArray();
+    }
+
     // Object (tree) manipulation
     public int getObjectCount() {
         return terrain_data.treeInstanceCount;
