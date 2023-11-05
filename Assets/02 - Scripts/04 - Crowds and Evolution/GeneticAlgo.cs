@@ -116,8 +116,8 @@ public class GeneticAlgo : MonoBehaviour
     /// <param name="animal"></param>
     public void removeAnimal(Animal animal)
     {
-        /*animals.Remove(animal.transform.gameObject);
-        Destroy(animal.transform.gameObject);*/
+        animals.Remove(animal.transform.gameObject);
+        Destroy(animal.transform.gameObject);
     }
 
 }

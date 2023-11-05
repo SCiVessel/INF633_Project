@@ -7,6 +7,7 @@ using UnityEngine.UI;
 
 public class QuadrupedAutoController : MonoBehaviour
 {
+    public bool enable_RL = true;
 
     public float max_speed = 0.5f;
     protected Terrain terrain;
@@ -43,7 +44,7 @@ public class QuadrupedAutoController : MonoBehaviour
 
     void Update()
     {
-        //do
+        if (!enable_RL)
         {
             Vector3 gameObjectPosition = gameObject.transform.position;
             float shortestDistance = float.MaxValue;
@@ -82,13 +83,26 @@ public class QuadrupedAutoController : MonoBehaviour
                 loc.y = cterrain.getInterp(loc.x / scale.x, loc.z / scale.z);
                 newGoal.transform.position = loc;
             }
-            newGoal.transform.rotation = Quaternion.identity;
-
-            scriptQuadruped.updateGoal(newGoal.transform);
-
-            Debug.Log(nearestPoint);
-            Debug.Log(detailMap[(int)newGoal.transform.position.x, (int)newGoal.transform.position.y]);
         }
-        //while (detailMap[(int)newGoal.transform.position.x, (int)newGoal.transform.position.y] != 1);
+        else
+        {
+            Vector3 scale = terrain.terrainData.heightmapScale;
+            Vector3 v = newGoal.transform.rotation * Vector3.forward * max_speed;
+            Vector3 loc = newGoal.transform.position + v;
+            if (loc.x < 0)
+                loc.x += width;
+            else if (loc.x > width)
+                loc.x -= width;
+            if (loc.z < 0)
+                loc.z += height;
+            else if (loc.z > height)
+                loc.z -= height;
+            loc.y = cterrain.getInterp(loc.x / scale.x, loc.z / scale.z);
+            newGoal.transform.position = loc;
+        }
+        
+        newGoal.transform.rotation = Quaternion.identity;
+
+        scriptQuadruped.updateGoal(newGoal.transform);
     }
 }
