@@ -20,20 +20,17 @@ public class SmoothingTerrainBrush
 
         if (shape_bool)
         {
-            int diameter = radius * 2;
-            int kernelSize = diameter + 1;
+            int radiusSquared = radius * radius;
 
-            int kernelCenter = kernelSize / 2;
-            for (int zi = -kernelCenter; zi <= kernelCenter; zi++)
+            for (int zi = -radius; zi <= radius; zi++)
             {
-                for (int xi = -kernelCenter; xi <= kernelCenter; xi++)
+                for (int xi = -radius; xi <= radius; xi++)
                 {
-                    float weight = gaussianKernel[zi + kernelCenter, xi + kernelCenter];
-                    int sqrDist = xi * xi + zi * zi;
-                    if (sqrDist <= radius * radius)
+                    int distanceSquared = xi * xi + zi * zi;
+
+                    if (distanceSquared <= radiusSquared)
                     {
-                        float currentHeight = terrain.get(x + xi, z + zi);
-                        float smoothedHeight = ApplyGaussianWeight(terrain, x + xi, z + zi, weight);
+                        float smoothedHeight = ApplyGaussianWeight(terrain, x + xi, z + zi, gaussianKernel);
                         smoothedHeight = Mathf.Clamp(smoothedHeight, 0f, maxHeight);
 
                         if (x + xi >= terrainX0 && x + xi <= terrainX1 && z + zi >= terrainZ0 && z + zi <= terrainZ1)
@@ -44,13 +41,10 @@ public class SmoothingTerrainBrush
         }
         else
         {
-            int kernelSize = radius * 2 + 1;
-
             for (int zi = -radius; zi <= radius; zi++)
             {
                 for (int xi = -radius; xi <= radius; xi++)
                 {
-                    float currentHeight = terrain.get(x + xi, z + zi);
                     float smoothedHeight = ApplyGaussianWeight(terrain, x + xi, z + zi, gaussianKernel);
                     smoothedHeight = Mathf.Clamp(smoothedHeight, 0f, maxHeight);
 
@@ -59,12 +53,6 @@ public class SmoothingTerrainBrush
                 }
             }
         }
-    }
-
-    private static float ApplyGaussianWeight(CustomTerrain terrain, int x, int z, float weight)
-    {
-        float currentHeight = terrain.get(x, z);
-        return Mathf.Lerp(currentHeight, weight, weight);
     }
 
     private static float ApplyGaussianWeight(CustomTerrain terrain, int x, int z, float[,] kernel)
