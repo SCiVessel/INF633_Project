@@ -42,7 +42,7 @@ public class Animal : MonoBehaviour
     private GeneticAlgo genetic_algo = null;
 
     // Renderer.
-    private Material mat = null;
+    private List<Material> materials = new List<Material>();
 
     void Start()
     {
@@ -54,9 +54,19 @@ public class Animal : MonoBehaviour
 
         // Renderer used to update animal color.
         // It needs to be updated for more complex models.
-        MeshRenderer renderer = GetComponentInChildren<MeshRenderer>();
+        /*MeshRenderer renderer = GetComponentInChildren<MeshRenderer>();
         if (renderer != null)
-            mat = renderer.material;
+            mat = renderer.material;*/
+
+        MeshRenderer[] renderers = GetComponentsInChildren<MeshRenderer>();
+
+        foreach (MeshRenderer rend in renderers)
+        {
+            if (rend != null)
+            {
+                materials.Add(rend.material);
+            }
+        }
     }
 
     void Update()
@@ -99,8 +109,12 @@ public class Animal : MonoBehaviour
         }
 
         // Update the color of the animal as a function of the energy that it contains.
-        if (mat != null)
+        /*if (mat != null)
+            mat.color = Color.white * (energy / maxEnergy);*/
+        foreach (Material mat in materials)
+        {
             mat.color = Color.white * (energy / maxEnergy);
+        }
 
         // 1. Update receptor.
         UpdateVision();
@@ -109,8 +123,8 @@ public class Animal : MonoBehaviour
         float[] output = brain.getOutput(vision);
 
         // 3. Act using actuators.
-        float angle = (output[0] * 2.0f - 1.0f) * maxAngle;
-        tfm.Rotate(0.0f, angle, 0.0f);
+        /*float angle = (output[0] * 2.0f - 1.0f) * maxAngle;
+        tfm.Rotate(0.0f, angle, 0.0f);*/ // WTF?
     }
 
     /// <summary>
@@ -152,6 +166,29 @@ public class Animal : MonoBehaviour
                 }
             }
         }
+    }
+
+    public List<Vector3> GetVisibleCoordinates()
+    {
+        List<Vector3> visibleCoordinates = new List<Vector3>();
+        visibleCoordinates.Add(Vector3.zero);
+
+        /*UpdateVision();
+
+        for (int i = 0; i < nEyes; i++)
+        {
+            float angle = -((float)nEyes / 2.0f) * stepAngle + (stepAngle * i);
+            Vector3 forwardVector = Quaternion.Euler(0.0f, angle, 0.0f) * Vector3.forward;
+            float maxDistance = vision[i] * maxVision;
+            Vector3 eyePosition = tfm.position;
+
+            for (float distance = 1.0f; distance <= maxDistance; distance += 0.5f)
+            {
+                Vector3 visiblePosition = eyePosition + forwardVector * distance;
+                visibleCoordinates.Add(visiblePosition);
+            }
+        }*/
+        return visibleCoordinates;
     }
 
     public void Setup(CustomTerrain ct, GeneticAlgo ga)

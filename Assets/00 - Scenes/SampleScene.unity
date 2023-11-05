@@ -552,7 +552,7 @@ Light:
   m_BounceIntensity: 1
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
-  m_BoundingSphereOverride: {x: 2.6562882e+20, y: 0, z: 0, w: 0}
+  m_BoundingSphereOverride: {x: 89466.76, y: 89466.76, z: 6.7936e-41, w: 4.775446e-39}
   m_UseBoundingSphereOverride: 0
   m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
@@ -784,12 +784,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 374040426}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 58addec6626ef40dfb932e8efbbb6236, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  popSize: 100
+  popSize: 1
   animalPrefab: {fileID: 8107060311548940698, guid: 292e0cc1c13240549bc0ea73726cca30,
     type: 3}
   vegetationGrowthRate: 1
@@ -1370,7 +1370,7 @@ GameObject:
   - component: {fileID: 1207454602}
   - component: {fileID: 1207454601}
   m_Layer: 0
-  m_Name: Quadruped - target
+  m_Name: TestQuadruped - target
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1467,6 +1467,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -3535372178122588266, guid: 292e0cc1c13240549bc0ea73726cca30,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 682779226704977865, guid: 292e0cc1c13240549bc0ea73726cca30,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2954251903139554733, guid: 292e0cc1c13240549bc0ea73726cca30,
         type: 3}
       propertyPath: m_RotationOffsets.Array.data[0].x
@@ -1585,7 +1595,7 @@ PrefabInstance:
     - target: {fileID: 8107060311548940698, guid: 292e0cc1c13240549bc0ea73726cca30,
         type: 3}
       propertyPath: m_Name
-      value: Quadruped - (Procedural)
+      value: TestQuadruped
       objectReference: {fileID: 0}
     - target: {fileID: 8107060311548940699, guid: 292e0cc1c13240549bc0ea73726cca30,
         type: 3}
@@ -1896,7 +1906,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1688669856
 Transform:
   m_ObjectHideFlags: 0
@@ -2008,7 +2018,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1965446001
 Transform:
   m_ObjectHideFlags: 0

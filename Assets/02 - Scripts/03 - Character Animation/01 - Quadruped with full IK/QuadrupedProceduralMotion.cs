@@ -78,6 +78,11 @@ public class QuadrupedProceduralMotion : MonoBehaviour
         RootAdaptation();
     }
 
+    public void updateGoal(Transform myGoal)
+    {
+        goal = myGoal;
+    }
+
     #region Root Motion
 
     /// <summary>
