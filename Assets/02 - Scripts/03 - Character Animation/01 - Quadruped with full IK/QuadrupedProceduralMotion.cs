@@ -154,7 +154,7 @@ public class QuadrupedProceduralMotion : MonoBehaviour
         // The ray information gives you where you hit and the normal of the terrain in that location.
         if (Physics.Raycast(raycastOrigin, -transform.up, out RaycastHit hit, Mathf.Infinity))
         {
-            if (hit.transform.gameObject.layer == LayerMask.NameToLayer("Ground"))
+            if (hit.transform.gameObject.layer == LayerMask.NameToLayer("Default")) // "Ground" WTF? Do you have any idea how much time I wasted debugging THIS?
             {
                 posHit = hit.point;
                 distanceHit = hit.distance;
@@ -171,8 +171,11 @@ public class QuadrupedProceduralMotion : MonoBehaviour
 
         // START TODO ###################
 
-        // hips.position = ...
-        // hips.rotation = ...
+        Quaternion newTransRotation = Quaternion.FromToRotation(transform.up, normalTerrain) * transform.rotation;
+        transform.rotation = Quaternion.Lerp(transform.rotation, newTransRotation, Time.deltaTime * turnSpeed);
+
+        Vector3 newTransPosition = new Vector3(transform.position.x, hit.point.y, transform.position.z);
+        transform.position = newTransPosition;
 
         // END TODO ###################
     }
@@ -233,10 +236,14 @@ public class QuadrupedProceduralMotion : MonoBehaviour
 
         // START TODO ###################
 
-        // goalWorldLookDir = ...
-        // goalLocalLookDir = ...
+        goalWorldLookDir = Vector3.Normalize(goal.position - headBone.position);
+        goalLocalLookDir = headBone.parent.InverseTransformDirection(goalWorldLookDir);
 
-        Quaternion targetLocalRotation = Quaternion.identity; // Change!
+        var newDir = Vector3.RotateTowards(Vector3.forward, goalLocalLookDir, 1.0f, 0f);
+        Quaternion targetLocalRotation = Quaternion.LookRotation(newDir);
+
+        // Use Debug.DrawLine to visualize the goalWorldLookDir
+        Debug.DrawLine(headBone.position, headBone.position + goalWorldLookDir * 2, Color.red);
 
         // END TODO ###################
 

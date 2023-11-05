@@ -48,11 +48,11 @@ public class FootStepper : MonoBehaviour
 
         // START TODO ###################
 
-        // float distFromHome = ...
-        // float angleFromHome = ...
+        float distFromHome = Vector3.Distance(transform.position, homeTransform.position);
+        float angleFromHome = Quaternion.Angle(transform.rotation, homeTransform.rotation);
 
         // Change condition!
-        if (false)
+        if (distFromHome > distanceThreshold || angleFromHome > angleThreshold)
         {
             // END TODO ###################
 
@@ -103,13 +103,15 @@ public class FootStepper : MonoBehaviour
 
         // START TODO ###################
 
-        // Vector3 raycastOrigin = ...
+        Vector3 raycastOrigin = homeTransform.position + Vector3.up * heightOffset + overshootVector;
 
-        // if (Physics.Raycast(...))
-        // {
-        //  ...
-        //  return true;
-        // }
+        RaycastHit hit;
+        if (Physics.Raycast(raycastOrigin, Vector3.down, out hit))
+        {
+            endPos = hit.point;
+            endNormal = hit.normal;
+            return true;
+        }
 
         // END TODO ###################
 
@@ -162,8 +164,12 @@ public class FootStepper : MonoBehaviour
              */
 
             // START TODO ###################
+            Vector3 offset = endPos - startPos;
+            float offsetLen = offset.magnitude;
+            Vector3 midPos = startPos + offset.normalized * offsetLen * 0.5f + Vector3.up * heightOffset;
 
-            // transform.position = ...
+            Vector3 currentPosition = (1 - normalizedTime) * (1 - normalizedTime) * startPos + 2 * (1 - normalizedTime) * normalizedTime * midPos + normalizedTime * normalizedTime * endPos;
+            transform.position = currentPosition;
 
             // END TODO ###################
 
@@ -173,7 +179,7 @@ public class FootStepper : MonoBehaviour
 
             // START TODO ###################
 
-            // transform.rotation = ...
+            transform.rotation = Quaternion.Lerp(startRot, endRot, normalizedTime);
 
             // END TODO ###################
 
