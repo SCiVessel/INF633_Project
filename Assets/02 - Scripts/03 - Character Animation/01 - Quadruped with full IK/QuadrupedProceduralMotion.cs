@@ -171,21 +171,11 @@ public class QuadrupedProceduralMotion : MonoBehaviour
 
         // START TODO ###################
 
-        float maxBodyTiltAngle = 60f;
-        float bodyTiltAngle = Vector3.Angle(transform.up, normalTerrain);
+        Quaternion newTransRotation = Quaternion.FromToRotation(transform.up, normalTerrain) * transform.rotation;
+        transform.rotation = Quaternion.Slerp(transform.rotation, newTransRotation, Time.deltaTime * turnAcceleration);
 
-        if (bodyTiltAngle <= maxBodyTiltAngle)
-        {
-            Quaternion newTransRotation = Quaternion.FromToRotation(transform.up, normalTerrain) * transform.rotation;
-            transform.rotation = Quaternion.Lerp(transform.rotation, newTransRotation, Time.deltaTime * turnSpeed);
-
-            Vector3 newTransPosition = new Vector3(transform.position.x, hit.point.y, transform.position.z);
-            transform.position = newTransPosition;
-        }
-        else
-        {
-            currentVelocity.Reset(new Vector3(0, 0, 0));
-        }
+        Vector3 newTransPosition = new Vector3(transform.position.x, hit.point.y, transform.position.z);
+        transform.position = newTransPosition;
 
         // END TODO ###################
     }
