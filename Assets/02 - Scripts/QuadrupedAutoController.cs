@@ -7,9 +7,11 @@ using UnityEngine.UI;
 
 public class QuadrupedAutoController : MonoBehaviour
 {
-    public bool enable_vision;
+    public bool target_adsorption;
 
     private bool hasTarget;
+
+    private float angleFromBrain;
 
     public float max_speed;
     protected Terrain terrain;
@@ -25,7 +27,7 @@ public class QuadrupedAutoController : MonoBehaviour
 
     void Start()
     {
-        enable_vision = false;
+        target_adsorption = false;
 
         hasTarget = false;
 
@@ -52,7 +54,8 @@ public class QuadrupedAutoController : MonoBehaviour
 
     void Update()
     {
-        if (enable_vision)
+        angleFromBrain = scriptAnimals.getAngle();
+        if (target_adsorption)
         {
             if (!hasTarget)
             {
@@ -94,7 +97,7 @@ public class QuadrupedAutoController : MonoBehaviour
                     newGoal.transform.position = loc;
                 }
 
-                newGoal.transform.rotation = Quaternion.identity;
+                newGoal.transform.rotation = Quaternion.AngleAxis(angleFromBrain, gameObject.transform.up);
                 scriptQuadruped.updateGoal(newGoal.transform);
             }
         }
@@ -114,7 +117,7 @@ public class QuadrupedAutoController : MonoBehaviour
             loc.y = cterrain.getInterp(loc.x / scale.x, loc.z / scale.z);
             newGoal.transform.position = loc;
 
-            newGoal.transform.rotation = Quaternion.identity;
+            newGoal.transform.rotation = Quaternion.AngleAxis(angleFromBrain, gameObject.transform.up);
             scriptQuadruped.updateGoal(newGoal.transform);
         }
 

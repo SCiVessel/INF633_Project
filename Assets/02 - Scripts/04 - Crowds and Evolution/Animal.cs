@@ -37,6 +37,7 @@ public class Animal : MonoBehaviour
     // Animal.
     private Transform tfm;
     private float[] vision;
+    private float angle;
 
     // Genetic alg.
     private GeneticAlgo genetic_algo = null;
@@ -123,8 +124,12 @@ public class Animal : MonoBehaviour
         float[] output = brain.getOutput(vision);
 
         // 3. Act using actuators.
-        /*float angle = (output[0] * 2.0f - 1.0f) * maxAngle;
-        tfm.Rotate(0.0f, angle, 0.0f);*/ // WTF?
+        angle = (output[0] * 2.0f - 1.0f) * maxAngle;
+    }
+
+    public float getAngle()
+    {
+        return angle;
     }
 
     /// <summary>
