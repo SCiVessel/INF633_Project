@@ -38,6 +38,10 @@ public class Animal : MonoBehaviour
     private Transform tfm;
     private float[] vision;
     private float angle;
+    private int randomEvo;
+    private QuadrupedProceduralMotion scriptQuadruped;
+    private float randomBirth;
+    private float thresholdBirth;
 
     // Genetic alg.
     private GeneticAlgo genetic_algo = null;
@@ -68,6 +72,12 @@ public class Animal : MonoBehaviour
                 materials.Add(rend.material);
             }
         }
+
+        scriptQuadruped = GetComponent<QuadrupedProceduralMotion>();
+        if (scriptQuadruped == null)
+            Debug.LogError("Script 'QuadrupedProceduralMotion' is not found on the same GameObject!");
+
+        thresholdBirth = 0.4f;
     }
 
     void Update()
@@ -99,7 +109,21 @@ public class Animal : MonoBehaviour
             if (energy > maxEnergy)
                 energy = maxEnergy;
 
-            genetic_algo.addOffspring(this);
+            randomBirth = UnityEngine.Random.Range(0f, 1f);
+            if (randomBirth <= thresholdBirth)
+                genetic_algo.addOffspring(this);
+            else
+                thresholdBirth += 0.2f;
+
+            maxEnergy *= 1.01f;
+            randomEvo = Mathf.RoundToInt(UnityEngine.Random.Range(0f, 1f));
+            if (randomEvo == 0)
+                tfm.localScale *= 1.01f;
+            else
+            {
+                scriptQuadruped.turnSpeed *= 1.01f;
+                scriptQuadruped.moveSpeed *= 1.01f;
+            }
         }
 
         // If the energy is below 0, the animal dies.
