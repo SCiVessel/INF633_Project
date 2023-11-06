@@ -7,9 +7,11 @@ using UnityEngine.UI;
 
 public class QuadrupedAutoController : MonoBehaviour
 {
-    public bool enable_RL = true;
+    public bool enable_vision;
 
-    public float max_speed = 0.5f;
+    private bool hasTarget;
+
+    public float max_speed;
     protected Terrain terrain;
     protected CustomTerrain cterrain;
     protected float width, height;
@@ -23,6 +25,12 @@ public class QuadrupedAutoController : MonoBehaviour
 
     void Start()
     {
+        enable_vision = false;
+
+        hasTarget = false;
+
+        max_speed = 0.5f;
+
         newGoal = new GameObject("NewGoal");
         newGoal.transform.parent = transform;
 
@@ -44,44 +52,50 @@ public class QuadrupedAutoController : MonoBehaviour
 
     void Update()
     {
-        if (!enable_RL)
+        if (enable_vision)
         {
-            Vector3 gameObjectPosition = gameObject.transform.position;
-            float shortestDistance = float.MaxValue;
-            Vector3 nearestPoint = Vector3.zero;
-            List<Vector3> visibleCoord = scriptAnimals.GetVisibleCoordinates();
-            foreach (Vector3 spot in visibleCoord)
+            if (!hasTarget)
             {
-                if (detailMap[(int)spot.y, (int)spot.x] == 1)
+                Vector3 gameObjectPosition = gameObject.transform.position;
+                float shortestDistance = float.MaxValue;
+                Vector3 nearestPoint = Vector3.zero;
+                List<Vector3> visibleCoord = scriptAnimals.GetVisibleCoordinates();
+                foreach (Vector3 spot in visibleCoord)
                 {
-                    float distance = Vector3.Distance(gameObjectPosition, spot);
-                    if (distance < shortestDistance)
+                    if (detailMap[(int)spot.x, (int)spot.z] > 0)
                     {
-                        shortestDistance = distance;
-                        nearestPoint = spot;
+                        float distance = Vector3.Distance(gameObjectPosition, spot);
+                        if (distance < shortestDistance)
+                        {
+                            shortestDistance = distance;
+                            nearestPoint = spot;
+                        }
                     }
                 }
-            }
 
-            if (nearestPoint != Vector3.zero)
-            {
-                newGoal.transform.position = nearestPoint;
-            }
-            else
-            {
-                Vector3 scale = terrain.terrainData.heightmapScale;
-                Vector3 v = newGoal.transform.rotation * Vector3.forward * max_speed;
-                Vector3 loc = newGoal.transform.position + v;
-                if (loc.x < 0)
-                    loc.x += width;
-                else if (loc.x > width)
-                    loc.x -= width;
-                if (loc.z < 0)
-                    loc.z += height;
-                else if (loc.z > height)
-                    loc.z -= height;
-                loc.y = cterrain.getInterp(loc.x / scale.x, loc.z / scale.z);
-                newGoal.transform.position = loc;
+                if (nearestPoint != Vector3.zero)
+                {
+                    newGoal.transform.position = nearestPoint;
+                }
+                else
+                {
+                    Vector3 scale = terrain.terrainData.heightmapScale;
+                    Vector3 v = newGoal.transform.rotation * Vector3.forward * max_speed;
+                    Vector3 loc = newGoal.transform.position + v;
+                    if (loc.x < 0)
+                        loc.x += width;
+                    else if (loc.x > width)
+                        loc.x -= width;
+                    if (loc.z < 0)
+                        loc.z += height;
+                    else if (loc.z > height)
+                        loc.z -= height;
+                    loc.y = cterrain.getInterp(loc.x / scale.x, loc.z / scale.z);
+                    newGoal.transform.position = loc;
+                }
+
+                newGoal.transform.rotation = Quaternion.identity;
+                scriptQuadruped.updateGoal(newGoal.transform);
             }
         }
         else
@@ -99,10 +113,12 @@ public class QuadrupedAutoController : MonoBehaviour
                 loc.z -= height;
             loc.y = cterrain.getInterp(loc.x / scale.x, loc.z / scale.z);
             newGoal.transform.position = loc;
-        }
-        
-        newGoal.transform.rotation = Quaternion.identity;
 
-        scriptQuadruped.updateGoal(newGoal.transform);
+            newGoal.transform.rotation = Quaternion.identity;
+            scriptQuadruped.updateGoal(newGoal.transform);
+        }
+
+        hasTarget = (detailMap[(int)newGoal.transform.position.x, (int)newGoal.transform.position.z] > 0);
+        //Debug.Log(hasTarget);
     }
 }

@@ -171,9 +171,7 @@ public class Animal : MonoBehaviour
     public List<Vector3> GetVisibleCoordinates()
     {
         List<Vector3> visibleCoordinates = new List<Vector3>();
-        visibleCoordinates.Add(Vector3.zero);
-
-        /*UpdateVision();
+        UpdateVision();
 
         for (int i = 0; i < nEyes; i++)
         {
@@ -182,12 +180,12 @@ public class Animal : MonoBehaviour
             float maxDistance = vision[i] * maxVision;
             Vector3 eyePosition = tfm.position;
 
-            for (float distance = 1.0f; distance <= maxDistance; distance += 0.5f)
+            for (float distance = 0f; distance <= maxDistance; distance += 0.1f)
             {
                 Vector3 visiblePosition = eyePosition + forwardVector * distance;
                 visibleCoordinates.Add(visiblePosition);
             }
-        }*/
+        }
         return visibleCoordinates;
     }
 
